@@ -347,7 +347,7 @@
     <a class="hit tapA" href="#confettiA" aria-label="Tap για κομφετί"></a>
     <a class="hit tapB" href="#confettiB" aria-label="Tap ξανά για κομφετί"></a>
     <a class="hit giftHit" href="#message" aria-label="Άνοιξε το μήνυμα"></a>
-    <a class="hit soundHit" href="#sound" aria-label="Έκπληξη"></a>
+    <a class="hit soundHit" href="#sound" aria-label="Άνοιξε το birthday song"></a>
     <a class="hit gameHit" href="#game" aria-label="Άνοιξε το mini game"></a>
   </div>
 </main>
@@ -370,10 +370,28 @@
   </div>
 </section>
 
-<section id="sound" class="modal" aria-label="Cute popup">
+<section id="sound" class="modal" aria-label="Birthday song">
   <div class="modalCard">
-    <h2>🐶✨ Puppy power!</h2>
-    <p>Το τραγουδάκι θα το ξαναφτιάξουμε μετά — αλλά το mini game σε περιμένει χαμηλά 💗</p>
+    <h2>🎵 Birthday song</h2>
+    <p style="margin-bottom:12px">
+      Πάτησε ▶ και άκου το τραγούδι χωρίς να φύγεις από την κάρτα 💗
+    </p>
+
+    <iframe
+      data-testid="embed-iframe"
+      style="border-radius:12px"
+      src="https://open.spotify.com/embed/track/0ECF0UOd59dNy3jtbARsFH?utm_source=generator&si=ebba4537f8184708"
+      width="100%"
+      height="352"
+      frameBorder="0"
+      allowfullscreen=""
+      allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+      loading="eager">
+    </iframe>
+
+    <p style="font-size:.82rem;color:#777;margin:10px 0 0">
+      Στο iPhone το Spotify μπορεί να ζητήσει ένα πάτημα στο ▶ για να ξεκινήσει ο ήχος.
+    </p>
     <a class="close" href="#">Κλείσιμο</a>
   </div>
 </section>
