@@ -109,42 +109,78 @@
   }
 
 
-  /* Real draggable "Σύρε για Cuteness overload" control */
+  /* Real draggable slider aligned exactly over the slider already drawn in the artwork.
+     Only the heart knob is redrawn/moved; the original mint bar + lettering remain visible. */
   .dragSliderWrap {
+    --track-border:#9ed7cf;
+    --track-fill:#d7ece6;
     position:absolute;
-    left:18.6%;
-    top:85.2%;
-    width:68%;
-    height:7.3%;
+    left:14.7%;
+    top:84.85%;
+    width:69.7%;
+    height:7.15%;
     z-index:35;
+    overflow:visible;
     border-radius:999px;
-    overflow:hidden;
-    background:#e7f5f0;
-    border:3px solid #acdccc;
-    box-shadow:
-      0 3px 0 rgba(122,180,164,.30),
-      inset 0 1px 0 rgba(255,255,255,.9);
-    display:flex;
-    align-items:center;
+    background:transparent;
+    touch-action:none;
+    -webkit-tap-highlight-color:transparent;
   }
 
-  .dragSliderText {
+  /* Covers the static white knob printed in the artwork, so there is only one knob
+     after the user starts dragging. This recreates the left end of the mint bar. */
+  .dragSliderMask {
     position:absolute;
-    inset:0;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    padding-left:14%;
-    padding-right:6%;
-    color:#4f615c;
-    font-size:clamp(.68rem,2.7vw,1rem);
-    font-weight:800;
-    white-space:nowrap;
+    left:1.2%;
+    top:7%;
+    width:18.8%;
+    height:86%;
+    border-radius:999px;
+    background:linear-gradient(180deg,#e2f2ed 0%,#d8eee7 100%);
+    border:0;
+    box-shadow:none;
+    z-index:1;
+    pointer-events:none;
+  }
+
+  /* Moving heart knob */
+  .dragKnob {
+    position:absolute;
+    overflow:hidden;
+    left:4px;
+    top:50%;
+    width:clamp(36px,9.3vw,48px);
+    height:clamp(36px,9.3vw,48px);
+    transform:translateY(-50%);
+    border-radius:50%;
+    background:#fff;
+    box-shadow:
+      0 6px 12px rgba(76,110,101,.18),
+      inset 0 0 0 1px rgba(255,255,255,.9);
+    z-index:3;
+    pointer-events:none;
+  }
+
+
+  .hero img.dragHeart {
+    position:absolute;
+    inset:auto;
+    left:50%;
+    top:50%;
+    width:30%;
+    height:30%;
+    max-width:none;
+    max-height:none;
+    transform:translate(-50%,-50%);
+    display:block;
+    object-fit:contain;
     pointer-events:none;
     user-select:none;
     -webkit-user-select:none;
+    z-index:4;
   }
 
+  /* Invisible native range captures the swipe/drag reliably on iPhone. */
   .dragSlider {
     position:absolute;
     inset:0;
@@ -152,15 +188,14 @@
     height:100%;
     margin:0;
     padding:0;
-    opacity:1;
+    opacity:0.001;
+    z-index:4;
     appearance:none;
     -webkit-appearance:none;
     background:transparent;
     cursor:grab;
-    touch-action:pan-x;
-    -webkit-tap-highlight-color:transparent;
+    touch-action:none;
   }
-
   .dragSlider:active { cursor:grabbing; }
 
   .dragSlider::-webkit-slider-runnable-track {
@@ -169,50 +204,25 @@
     background:transparent;
     border:0;
   }
-
   .dragSlider::-webkit-slider-thumb {
     -webkit-appearance:none;
     appearance:none;
-    width:44px;
-    height:44px;
-    margin-top:calc((var(--slider-h, 58px) - 44px) / 2);
-    border-radius:50%;
-    border:2px solid rgba(255,255,255,.95);
-    background:
-      #fff
-      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23ff8178' d='M12 21s-7.2-4.6-9.4-8.4C.7 9.3 2.1 5.5 5.8 5.1c2.1-.2 3.5 1 4.2 2 0 0 .8-2 4.2-2 3.7.4 5.1 4.2 3.2 7.5C19.2 16.4 12 21 12 21z'/%3E%3C/svg%3E")
-      center/52% no-repeat;
-    box-shadow:0 3px 9px rgba(76,110,101,.22);
+    width:clamp(36px,9.3vw,48px);
+    height:clamp(36px,9.3vw,48px);
+    border:0;
+    background:transparent;
   }
-
   .dragSlider::-moz-range-track {
     width:100%;
     height:100%;
     background:transparent;
     border:0;
   }
-
   .dragSlider::-moz-range-thumb {
-    width:44px;
-    height:44px;
-    border-radius:50%;
-    border:2px solid rgba(255,255,255,.95);
-    background:#fff;
-    box-shadow:0 3px 9px rgba(76,110,101,.22);
-  }
-
-  @media (max-width:390px) {
-    .dragSlider::-webkit-slider-thumb {
-      width:40px;
-      height:40px;
-    }
-    .dragSlider::-moz-range-thumb {
-      width:40px;
-      height:40px;
-    }
-    .dragSliderText {
-      font-size:.66rem;
-    }
+    width:clamp(36px,9.3vw,48px);
+    height:clamp(36px,9.3vw,48px);
+    border:0;
+    background:transparent;
   }
 
   /* CSS-only modal system */
@@ -469,7 +479,20 @@
     <a class="hit giftHit" href="#message" aria-label="Άνοιξε το μήνυμα"></a>
     <a class="hit soundHit" href="#sound" aria-label="Άνοιξε το birthday song"></a>
     <div class="dragSliderWrap" id="dragSliderWrap">
-      <div class="dragSliderText">Σύρε για Cuteness overload →</div>
+      <div class="dragSliderMask" aria-hidden="true"></div>
+      <div class="dragKnob" id="dragKnob" aria-hidden="true">
+        <img class="dragHeart" src="data:image/png;base64,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" alt="">
+      </div>
+      <input
+        id="gameSlider"
+        class="dragSlider"
+        type="range"
+        min="0"
+        max="100"
+        value="0"
+        step="1"
+        aria-label="Σύρε για Cuteness overload και άνοιξε το παιχνίδι">
+    </div>
       <input
         id="gameSlider"
         class="dragSlider"
@@ -550,25 +573,47 @@
 
   const gameSlider = document.getElementById('gameSlider');
   const dragSliderWrap = document.getElementById('dragSliderWrap');
+  const dragKnob = document.getElementById('dragKnob');
+
+  function positionSliderKnob() {
+    if (!gameSlider || !dragSliderWrap || !dragKnob) return;
+    const value = Number(gameSlider.value) || 0;
+    const wrapW = dragSliderWrap.clientWidth;
+    const knobW = dragKnob.offsetWidth;
+    const inset = 5;
+    const travel = Math.max(0, wrapW - knobW - inset * 2);
+    dragKnob.style.left = (inset + travel * value / 100) + 'px';
+  }
 
   function resetGameSlider() {
-    if (gameSlider) gameSlider.value = 0;
+    if (!gameSlider) return;
+    gameSlider.value = 0;
+    positionSliderKnob();
   }
 
   if (gameSlider) {
     gameSlider.addEventListener('input', () => {
+      positionSliderKnob();
+
       if (Number(gameSlider.value) >= 96) {
         gameSlider.value = 100;
-        window.location.hash = 'game';
-        window.setTimeout(resetGameSlider, 220);
+        positionSliderKnob();
+        window.setTimeout(() => {
+          window.location.hash = 'game';
+          window.setTimeout(resetGameSlider, 240);
+        }, 90);
       }
     });
 
     gameSlider.addEventListener('change', () => {
       if (Number(gameSlider.value) < 96) {
         gameSlider.value = 0;
+        positionSliderKnob();
       }
     });
+
+    window.addEventListener('resize', positionSliderKnob);
+    requestAnimationFrame(positionSliderKnob);
   }
 
   const game = document.getElementById('miniGame');
