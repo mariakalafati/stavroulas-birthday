@@ -9,42 +9,64 @@
     --bg1:#fffdfa; --bg2:#fff6f0; --coral:#ff8178; --ink:#4b4b4b; --mint:#b9e3d8;
   }
   * { box-sizing:border-box; }
-  html, body { margin:0; min-height:100%; }
+  html, body {
+    margin:0;
+    width:100%;
+    height:100%;
+    min-height:100%;
+    overflow:hidden;
+  }
+
   body {
     min-height:100vh;
+    min-height:100dvh;
     display:grid;
     place-items:center;
-    padding:14px;
-    background:
-      radial-gradient(circle at 14% 15%, #fff2ef 0, transparent 26%),
-      radial-gradient(circle at 82% 16%, #eefaf6 0, transparent 25%),
-      linear-gradient(180deg,var(--bg1),var(--bg2));
-    font-family:"Trebuchet MS","Arial Rounded MT Bold",system-ui,sans-serif;
-    overflow-x:hidden;
-  }
-  .card {
-    width:min(100%,470px);
-    padding:10px;
-    border-radius:30px;
+    padding:0;
     background:#fffaf7;
-    box-shadow:0 20px 50px rgba(124,94,79,.16);
+    font-family:"Trebuchet MS","Arial Rounded MT Bold",system-ui,sans-serif;
+    overflow:hidden;
   }
+
+  /* Full-screen on phones; portrait-card proportions on wider screens. */
+  .card {
+    width:min(100vw, 56.25dvh);
+    height:100vh;
+    height:100dvh;
+    padding:0;
+    border-radius:0;
+    background:#fffaf7;
+    box-shadow:none;
+    overflow:hidden;
+  }
+
   .hero {
     position:relative;
     width:100%;
-    aspect-ratio:1080/1920;
+    height:100%;
     overflow:hidden;
-    border-radius:24px;
-    background:#fff;
+    border-radius:0;
+    background:#fffaf7;
   }
+
   .hero img {
-    position:absolute; inset:0;
-    width:100%; height:100%;
-    object-fit:cover;
+    position:absolute;
+    inset:0;
+    width:100%;
+    height:100%;
+    object-fit:fill;
     display:block;
     user-select:none;
     -webkit-user-select:none;
     pointer-events:none;
+  }
+
+  @media (orientation:portrait) {
+    .card {
+      width:100vw;
+      height:100vh;
+      height:100dvh;
+    }
   }
 
   .hit {
@@ -86,13 +108,111 @@
     border-radius:999px;
   }
 
-  /* bottom slider area -> popup mini game */
-  .gameHit {
+
+  /* Real draggable "Σύρε για Cuteness overload" control */
+  .dragSliderWrap {
+    position:absolute;
     left:18.6%;
     top:85.2%;
     width:68%;
     height:7.3%;
+    z-index:35;
     border-radius:999px;
+    overflow:hidden;
+    background:#e7f5f0;
+    border:3px solid #acdccc;
+    box-shadow:
+      0 3px 0 rgba(122,180,164,.30),
+      inset 0 1px 0 rgba(255,255,255,.9);
+    display:flex;
+    align-items:center;
+  }
+
+  .dragSliderText {
+    position:absolute;
+    inset:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding-left:14%;
+    padding-right:6%;
+    color:#4f615c;
+    font-size:clamp(.68rem,2.7vw,1rem);
+    font-weight:800;
+    white-space:nowrap;
+    pointer-events:none;
+    user-select:none;
+    -webkit-user-select:none;
+  }
+
+  .dragSlider {
+    position:absolute;
+    inset:0;
+    width:100%;
+    height:100%;
+    margin:0;
+    padding:0;
+    opacity:1;
+    appearance:none;
+    -webkit-appearance:none;
+    background:transparent;
+    cursor:grab;
+    touch-action:pan-x;
+    -webkit-tap-highlight-color:transparent;
+  }
+
+  .dragSlider:active { cursor:grabbing; }
+
+  .dragSlider::-webkit-slider-runnable-track {
+    width:100%;
+    height:100%;
+    background:transparent;
+    border:0;
+  }
+
+  .dragSlider::-webkit-slider-thumb {
+    -webkit-appearance:none;
+    appearance:none;
+    width:44px;
+    height:44px;
+    margin-top:calc((var(--slider-h, 58px) - 44px) / 2);
+    border-radius:50%;
+    border:2px solid rgba(255,255,255,.95);
+    background:
+      #fff
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23ff8178' d='M12 21s-7.2-4.6-9.4-8.4C.7 9.3 2.1 5.5 5.8 5.1c2.1-.2 3.5 1 4.2 2 0 0 .8-2 4.2-2 3.7.4 5.1 4.2 3.2 7.5C19.2 16.4 12 21 12 21z'/%3E%3C/svg%3E")
+      center/52% no-repeat;
+    box-shadow:0 3px 9px rgba(76,110,101,.22);
+  }
+
+  .dragSlider::-moz-range-track {
+    width:100%;
+    height:100%;
+    background:transparent;
+    border:0;
+  }
+
+  .dragSlider::-moz-range-thumb {
+    width:44px;
+    height:44px;
+    border-radius:50%;
+    border:2px solid rgba(255,255,255,.95);
+    background:#fff;
+    box-shadow:0 3px 9px rgba(76,110,101,.22);
+  }
+
+  @media (max-width:390px) {
+    .dragSlider::-webkit-slider-thumb {
+      width:40px;
+      height:40px;
+    }
+    .dragSlider::-moz-range-thumb {
+      width:40px;
+      height:40px;
+    }
+    .dragSliderText {
+      font-size:.66rem;
+    }
   }
 
   /* CSS-only modal system */
@@ -348,7 +468,18 @@
     <a class="hit tapB" href="#confettiB" aria-label="Tap ξανά για κομφετί"></a>
     <a class="hit giftHit" href="#message" aria-label="Άνοιξε το μήνυμα"></a>
     <a class="hit soundHit" href="#sound" aria-label="Άνοιξε το birthday song"></a>
-    <a class="hit gameHit" href="#game" aria-label="Άνοιξε το mini game"></a>
+    <div class="dragSliderWrap" id="dragSliderWrap">
+      <div class="dragSliderText">Σύρε για Cuteness overload →</div>
+      <input
+        id="gameSlider"
+        class="dragSlider"
+        type="range"
+        min="0"
+        max="100"
+        value="0"
+        step="1"
+        aria-label="Σύρε για Cuteness overload και άνοιξε το παιχνίδι">
+    </div>
   </div>
 </main>
 
@@ -357,14 +488,12 @@
 
 <section id="message" class="modal" aria-label="Μήνυμα">
   <div class="modalCard">
-    <h2>Χρόνια Πολλά, Σταυρούλα! 🐾</h2>
+    <h2>Χρόνια Πολλά, Σταυρούλα μας! 🐾</h2>
     <p>
-      Να τα εκατοστήσεις! Στα 17 σου να έχεις υγεία, χαμόγελα,
-      όμορφες στιγμές και ανθρώπους που σε αγαπούν πραγματικά.
+      Να τα εκατοστήσεις Σταυρουλίτσα! Εύχομαι όλα τα καλύτερα στο καλύτερο κορίτσι.
     </p>
     <p>
-      Εύχομαι η νέα σου χρονιά να είναι γεμάτη χαρά, επιτυχίες,
-      γλυκές εκπλήξεις και πολλή αγάπη! 💖
+      Η 17η χρονιά σου να είναι γεμάτη χαρά, επιτυχίες, όμορφες στιγμές και πολλή αγάπη!
     </p>
     <a class="close" href="#">Κλείσιμο</a>
   </div>
@@ -373,10 +502,6 @@
 <section id="sound" class="modal" aria-label="Birthday song">
   <div class="modalCard">
     <h2>🎵 Birthday song</h2>
-    <p style="margin-bottom:12px">
-      Πάτησε ▶ και άκου το τραγούδι χωρίς να φύγεις από την κάρτα 💗
-    </p>
-
     <iframe
       data-testid="embed-iframe"
       style="border-radius:12px"
@@ -389,9 +514,6 @@
       loading="eager">
     </iframe>
 
-    <p style="font-size:.82rem;color:#777;margin:10px 0 0">
-      Στο iPhone το Spotify μπορεί να ζητήσει ένα πάτημα στο ▶ για να ξεκινήσει ο ήχος.
-    </p>
     <a class="close" href="#">Κλείσιμο</a>
   </div>
 </section>
@@ -399,8 +521,7 @@
 <section id="game" class="modal" aria-label="Mini game">
   <div class="gameCard">
     <div class="gameTitle">Cuteness Overload Game 🐶</div>
-    <div class="gameSub">Πάτα μέσα στο game για άλμα και απόφυγε τις τούρτες 🎂 και τα δώρα 🎁</div>
-
+    
     <div class="miniGame" id="miniGame">
       <div class="gameCloud cloud1">☁️</div>
       <div class="gameCloud cloud2">☁️</div>
@@ -426,6 +547,30 @@
 
 <script>
 (() => {
+
+  const gameSlider = document.getElementById('gameSlider');
+  const dragSliderWrap = document.getElementById('dragSliderWrap');
+
+  function resetGameSlider() {
+    if (gameSlider) gameSlider.value = 0;
+  }
+
+  if (gameSlider) {
+    gameSlider.addEventListener('input', () => {
+      if (Number(gameSlider.value) >= 96) {
+        gameSlider.value = 100;
+        window.location.hash = 'game';
+        window.setTimeout(resetGameSlider, 220);
+      }
+    });
+
+    gameSlider.addEventListener('change', () => {
+      if (Number(gameSlider.value) < 96) {
+        gameSlider.value = 0;
+      }
+    });
+  }
+
   const game = document.getElementById('miniGame');
   const dog = document.getElementById('dog');
   const ob = document.getElementById('ob');
@@ -599,6 +744,7 @@
 
   // Reset when the hash changes to #game so it starts fresh every time the popup opens.
   window.addEventListener('hashchange', () => {
+    resetGameSlider();
     if (location.hash === '#game') {
       resetState(true);
     }
